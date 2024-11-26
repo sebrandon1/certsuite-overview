@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	dci "github.com/sebrandon1/go-dci/lib"
+	"github.com/shimritproj/certsuite-overview/config"
 )
 
 const (
@@ -14,10 +15,11 @@ const (
 func fetchDciData() error {
 	var totalErrors, totalFailures, totalSkips, totalSuccess int
 
-	// Initialize DCI client
-	clientID := "remoteci/8f6c5d9a-3ca6-4f37-bb59-1aa15d0fa43e"
-	apiSecret := "z9F9GeEAZvD8rtqucsmHarfnGMHRt4dzsr063syZv5wxxHRzhfEEoDX6MZ6e5yB0"
-	dciClient := dci.NewClient(clientID, apiSecret)
+	cfg, err := config.LoadConfig("config/config.json") // Ensure correct path to config.json
+	if err != nil {
+		log.Fatalf("Error loading config: %v", err)
+	}
+	dciClient := dci.NewClient(cfg.ClientID, cfg.APISecret)
 
 	// Initialize the database
 	db, err := initDB()

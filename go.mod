@@ -1,4 +1,4 @@
-module CERTSUITE-OVERVIEW
+module github.com/shimritproj/certsuite-overview
 
 go 1.23.2
 

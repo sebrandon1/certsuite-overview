@@ -5,27 +5,29 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/shimritproj/certsuite-overview/config"
 
 	quay "github.com/sebrandon1/go-quay/lib"
 )
 
 const (
-	bearerToken = "wdSLOoT8K3pa4BQhsTnWxLSobTWMNF4X67p4VmU1"
-	DateFormat  = "01/02/2006"
+	DateFormat = "01/02/2006"
 )
 
 // fetchQuayData fetches the number of image pulls from Quay.
 func fetchQuayData() error {
-	quayClient, err := quay.NewClient(bearerToken)
+	cfg, err := config.LoadConfig("config/config.json") // Ensure correct path to config.json
+	if err != nil {
+		log.Fatalf("Error loading config: %v", err)
+	}
+	quayClient, err := quay.NewClient(cfg.BearerToken)
 	if err != nil {
 		return err
 	}
 
-	namespace := "certsuite"
-	repository := "redhat-best-practices-for-k8s"
 	startDate, endDate := getTodayAndYesterday()
 
-	data, err := quayClient.GetAggregatedLogs(namespace, repository, startDate, endDate)
+	data, err := quayClient.GetAggregatedLogs(cfg.Namespace, cfg.Repository, startDate, endDate)
 	if err != nil {
 		return err
 	}

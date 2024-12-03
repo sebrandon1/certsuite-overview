@@ -1,7 +1,0 @@
-{
-    "bearerToken": "wdSLOoT8K3pa4BQhsTnWxLSobTWMNF4X67p4VmU1",
-    "clientID" : "remoteci/8f6c5d9a-3ca6-4f37-bb59-1aa15d0fa43e",
-	"apiSecret" : "z9F9GeEAZvD8rtqucsmHarfnGMHRt4dzsr063syZv5wxxHRzhfEEoDX6MZ6e5yB0",
-    "namespace" : "certsuite",
-	"repository" : "redhat-best-practices-for-k8s"
-}

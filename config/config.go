@@ -1,35 +1,49 @@
 package config
 
 import (
-	"encoding/json"
-	"os"
+	"log"
+
+	"github.com/spf13/viper"
 )
 
-// Config struct to hold the configuration values
 type Config struct {
-	BearerToken string `json:"bearerToken"`
-	ClientID    string `json:"clientID"`
-	APISecret   string `json:"apiSecret"`
-	Namespace   string `json:"namespace"`
-	Repository  string `json:"repository"`
+	DBUser      string
+	DBPassword  string
+	DBURL       string
+	DBPort      string
+	ClientID    string
+	APISecret   string
+	BearerToken string
+	Namespace   string
+	Repository  string
 }
 
-// LoadConfig loads configuration from a JSON file
-func LoadConfig(filePath string) (*Config, error) {
-	// Open the config file
-	file, err := os.Open(filePath)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
+var AppConfig Config
 
-	// Decode the JSON file into the Config struct
-	var config Config
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&config)
-	if err != nil {
-		return nil, err
-	}
+// Initialize Viper and load configuration
+func LoadConfig() {
+	// Configure Viper to read from environment variables
+	viper.AutomaticEnv()
 
-	return &config, nil
+	// Load the configuration into the AppConfig struct
+	AppConfig = Config{
+		DBUser:      GetConfigValue("DB_USER"),
+		DBPassword:  GetConfigValue("DB_PASSWORD"),
+		DBURL:       GetConfigValue("DB_URL"),
+		DBPort:      GetConfigValue("DB_PORT"),
+		ClientID:    GetConfigValue("CLIENTID"),
+		APISecret:   GetConfigValue("APISECRET"),
+		BearerToken: GetConfigValue("BEARERTOKEN"),
+		Namespace:   GetConfigValue("NAMESPACE"),
+		Repository:  GetConfigValue("REPOSITORY"),
+	}
+}
+
+// Helper function to get a configuration value by key
+func GetConfigValue(key string) string {
+	value := viper.GetString(key)
+	if value == "" {
+		log.Fatalf("Configuration key %s is missing", key)
+	}
+	return value
 }

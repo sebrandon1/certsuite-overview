@@ -1,0 +1,44 @@
+name: Daily Sync
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync-job:
+    runs-on: ubuntu-22.04
+
+    # Global environment variables for the job
+    env:
+      NUM_DAYS: "1"
+      DB_CHOICE: "aws"
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      CLIENTID: ${{ secrets.CLIENTID }}
+      APISECRET: ${{ secrets.APISECRET }}
+      BEARERTOKEN: ${{ secrets.BEARERTOKEN }}
+      NAMESPACE: ${{ vars.NAMESPACE }}
+      REPOSITORY: ${{ vars.REPOSITORY }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+
+      - name: List files in the repository
+        run: ls -R
+      
+      - name: Build certsuite-overview project
+        run: |
+          cd cmd
+          go build -o ../certsuite-overview
+
+      - name: Run the certsuite-overview project
+        run: ./certsuite-overview fetch

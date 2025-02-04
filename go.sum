@@ -48,8 +48,8 @@ github.com/sagikazarmark/locafero v0.6.0 h1:ON7AQg37yzcRPU69mt7gwhFEBwxI6P9T4Qu3
 github.com/sagikazarmark/locafero v0.6.0/go.mod h1:77OmuIc6VTraTXKXIs/uvUxKGUXjE1GbemJYHqdNjX0=
 github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6gto+ugjYE=
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
-github.com/sebrandon1/go-dci v0.0.3 h1:zyo30UaOFgc3X/abk6K+8w16z3wSwdkGvdtebov9ngE=
-github.com/sebrandon1/go-dci v0.0.3/go.mod h1:FxaZxxseRHvX7cTHi9aH7Z+UV5iQkZXW9Gw+QHQOMfA=
+github.com/sebrandon1/go-dci v0.0.4 h1:Kcruar09cWOPo5JHsVFDbNf85bbjCZp773yI3hHFu5E=
+github.com/sebrandon1/go-dci v0.0.4/go.mod h1:YMipqJRpp5Kjvgh7XKgOAyPuSs/1bBezHdfyzHPIqiE=
 github.com/sebrandon1/go-quay v0.0.3-0.20241106143021-965f4f4c823d h1:Y6PrRFoLkM+GKwweABw4y4sKQIP5SzLmbT4u2KS/uqA=
 github.com/sebrandon1/go-quay v0.0.3-0.20241106143021-965f4f4c823d/go.mod h1:VrudT8CpvPAkSVh+HAcV8uvEPyIwiibth3zObyGVkn8=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=

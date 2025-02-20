@@ -37,11 +37,15 @@ func FetchQuayData() error {
 	// Get date range
 	startDate, endDate := getTodayAndYesterday()
 
+	log.Printf("Fetching Quay data for the date range: %s - %s", startDate, endDate)
+
 	// Fetch aggregated logs from Quay
 	data, err := quayClient.GetAggregatedLogs(config.AppConfig.Namespace, config.AppConfig.Repository, startDate, endDate)
 	if err != nil {
 		return fmt.Errorf("failed to fetch aggregated logs from Quay: %w", err)
 	}
+
+	log.Printf("Fetched %d aggregated logs from Quay", len(data.Aggregated))
 
 	// Loop through the aggregated data and insert it into the database
 	for _, aggregated := range data.Aggregated {

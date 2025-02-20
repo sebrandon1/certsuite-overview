@@ -30,11 +30,15 @@ func FetchDciData() error {
 		}
 	}()
 
+	log.Printf("Fetching DCI data for the last %d days", daysBackLimit)
+
 	// Fetch DCI runs
 	runs, err := dciClient.GetJobs(daysBackLimit)
 	if err != nil {
 		return fmt.Errorf("failed to fetch DCI runs: %w", err)
 	}
+
+	log.Printf("Fetched %d DCI runs", len(runs))
 
 	// Store job and component data in the database
 	for _, run := range runs {

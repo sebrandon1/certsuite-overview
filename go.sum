@@ -50,8 +50,8 @@ github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6g
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
 github.com/sebrandon1/go-dci v0.0.6 h1:knllFYznGLVOk4nEZ6WHAyxSDnxCkFvlMu6zo/o0oZ4=
 github.com/sebrandon1/go-dci v0.0.6/go.mod h1:M29aKBHEcPJEo1Dz5uStG0T2wcmU9PtbXpdLOMS0pgI=
-github.com/sebrandon1/go-quay v0.0.3 h1:3BjWb6JxiqLqioJPTCxchNeI3rdo6z8WKUoxKE5L/zM=
-github.com/sebrandon1/go-quay v0.0.3/go.mod h1:C2W/iLFCvf+IUW+Nva0FeKm3PqvCDqjh8zER2ANCbHk=
+github.com/sebrandon1/go-quay v0.0.4 h1:yX5bBeIBCUX8PUCXJAcTFJzvv3W9isot+KebJ8e5Oa4=
+github.com/sebrandon1/go-quay v0.0.4/go.mod h1:axiJALajHgmOJ62BeZav157sW8Gm96Jqvd3YUv3SNOA=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=

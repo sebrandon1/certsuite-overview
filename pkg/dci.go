@@ -5,9 +5,8 @@ import (
 	"log"
 	"strings"
 
-	dci "github.com/sebrandon1/go-dci/lib"
 	"github.com/redhat-best-practices-for-k8s/certsuite-overview/config"
-	
+	dci "github.com/sebrandon1/go-dci/lib"
 )
 
 const (
@@ -53,6 +52,12 @@ func FetchDciData() error {
 						totalSkips += result.Skips
 						totalSuccess += result.Success
 					}
+
+					log.Println("Inserting DCI component data into the database...")
+					log.Printf("Job ID: %s, Commit: %s, CreatedAt: %v, TotalSuccess: %d, TotalFailures: %d, TotalErrors: %d, TotalSkips: %d",
+						job.ID, commitHash, job.CreatedAt, totalSuccess, totalFailures, totalErrors, totalSkips)
+					log.Println("--------------------")
+
 					if err = insertComponentData(db, job.ID, commitHash, job.CreatedAt, totalSuccess, totalFailures, totalErrors, totalSkips); err != nil {
 						log.Printf(
 							"Error inserting DCI component entry: Job ID: %s, Commit: %s, CreatedAt: %v, TotalSuccess: %d, TotalFailures: %d, TotalErrors: %d, TotalSkips: %d. Error: %v",

@@ -7,8 +7,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	quay "github.com/sebrandon1/go-quay/lib"
 	"github.com/redhat-best-practices-for-k8s/certsuite-overview/config"
+	quay "github.com/sebrandon1/go-quay/lib"
 )
 
 const (
@@ -45,11 +45,15 @@ func FetchQuayData() error {
 
 	// Loop through the aggregated data and insert it into the database
 	for _, aggregated := range data.Aggregated {
+		log.Println("Inserting Quay data into the database...")
+		log.Printf("Datetime: %s, Count: %d, Kind: %s", aggregated.Datetime, aggregated.Count, aggregated.Kind)
+		log.Println("--------------------")
 		if err = insertQuayData(db, aggregated.Datetime, aggregated.Count, aggregated.Kind); err != nil {
 			log.Printf("Failed to insert Quay data (Datetime: %s, Count: %d, Kind: %s): %v", aggregated.Datetime, aggregated.Count, aggregated.Kind, err)
 			return fmt.Errorf("failed to insert Quay data: %w", err)
 		}
 	}
+	log.Println("Successfully fetched and stored Quay data.")
 	return nil
 }
 
@@ -65,5 +69,5 @@ func getTodayAndYesterday() (string, string) {
 	yesterday := today.Add(-24 * time.Hour)
 	yesterdayStr := yesterday.Format(DateFormat)
 
-	return yesterdayStr,todayStr 
+	return yesterdayStr, todayStr
 }

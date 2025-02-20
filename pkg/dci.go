@@ -21,7 +21,7 @@ func FetchDciData() error {
 	dciClient := dci.NewClient(config.AppConfig.ClientID, config.AppConfig.APISecret)
 
 	// Initialize database connection
-	db, err := chooseDatabase()
+	db, err := ChooseDatabase()
 	if err != nil {
 		return err
 	}

@@ -18,7 +18,7 @@ const (
 // fetchQuayData fetches the number of image pulls from Quay.
 func FetchQuayData() error {
 	// Initialize database connection
-	db, err := chooseDatabase()
+	db, err := ChooseDatabase()
 	if err != nil {
 		return err
 	}

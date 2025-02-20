@@ -5,6 +5,7 @@ import (
 
 	"github.com/redhat-best-practices-for-k8s/certsuite-overview/config"
 	"github.com/spf13/cobra"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Command for 'fetch' action
@@ -12,11 +13,8 @@ var fetchCmd = &cobra.Command{
 	Use:   "fetch",
 	Short: "Fetch certsuite usage from Quay and DCI",
 	Run: func(cmd *cobra.Command, args []string) {
-		config.LoadConfig()
-
-		// Call the function to fetch certsuite usage
-		err := FetchCertsuiteUsage()
-		if err != nil {
+		// Fetch data from Quay and DCI and store it in the database
+		if err := FetchCertsuiteUsage(); err != nil {
 			log.Fatalf("Failed to fetch certsuite usage: %v", err)
 		}
 		log.Println("Certsuite usage fetched successfully")
@@ -30,7 +28,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	// Add fetchCmd to root command
+	config.LoadConfig()
 	rootCmd.AddCommand(fetchCmd)
 }
 

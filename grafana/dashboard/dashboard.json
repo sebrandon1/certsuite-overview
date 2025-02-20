@@ -1,0 +1,30 @@
+{
+    "dashboard": {
+      "id": null,
+      "title": "Certsuite Overview",
+      "panels": [
+        {
+          "title": "DCI Test Runs",
+          "type": "graph",
+          "targets": [
+            {
+              "datasource": "MySQL",
+              "rawSql": "SELECT datetime AS time, count AS value FROM aggregated_logs ORDER BY datatime ASC",
+              "format": "time_series"
+            }
+          ]
+        },
+        {
+            "title": "DCI Component Stats",
+            "type": "graph",
+            "targets": [
+              {
+                "datasource": "MySQL",
+                "rawSql": "SELECT job_id, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components GROUP BY job_id",
+                "format": "time_series"
+              }
+            ]
+        }
+      ]
+    }
+  }

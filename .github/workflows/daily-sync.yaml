@@ -20,8 +20,8 @@ jobs:
       CLIENTID: ${{ secrets.CLIENTID }}
       APISECRET: ${{ secrets.APISECRET }}
       BEARERTOKEN: ${{ secrets.BEARERTOKEN }}
-      NAMESPACE: ${{ vars.NAMESPACE }}
-      REPOSITORY: ${{ vars.REPOSITORY }}
+      NAMESPACE: redhat-best-practices-for-k8s
+      REPOSITORY: certsuite
 
     steps:
       - name: Checkout Repository

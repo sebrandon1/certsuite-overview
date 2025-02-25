@@ -9,20 +9,29 @@ import (
 )
 
 // insertComponentData inserts component details into the dci_components table.
-func insertComponentData(db *sql.DB, job_id, commit, createdAt string, totalSuccess, totalFailures, totalErrors, totalSkips int) error {
+func insertComponentData(db *sql.DB, jobID, commit, createdAt string, totalSuccess, totalFailures, totalErrors, totalSkips int) error {
 	insertQuery := `
-		INSERT OR REPLACE INTO dci_components (job_id, commit_hash, createdAt, totalSuccess, totalFailures, totalErrors, totalSkips)
-		VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO dci_components (job_id, commit_hash, createdAt, totalSuccess, totalFailures, totalErrors, totalSkips)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+        commit_hash = VALUES(commit_hash),
+        createdAt = VALUES(createdAt),
+        totalSuccess = VALUES(totalSuccess),
+        totalFailures = VALUES(totalFailures),
+        totalErrors = VALUES(totalErrors),
+        totalSkips = VALUES(totalSkips);
     `
-	_, err := db.Exec(insertQuery, job_id, commit, createdAt, totalSuccess, totalFailures, totalErrors, totalSkips)
+	_, err := db.Exec(insertQuery, jobID, commit, createdAt, totalSuccess, totalFailures, totalErrors, totalSkips)
 	return err
 }
 
 // insertQuayData inserts a record of Quay image pulls into the database.
 func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	insertQuery := `
-        INSERT OR REPLACE INTO aggregated_logs (datetime, count, kind) 
-        VALUES (?, ?, ?);
+        INSERT INTO aggregated_logs (datetime, count, kind) 
+        VALUES (?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+        count = VALUES(count);
     `
 	_, err := db.Exec(insertQuery, datetime, count, kind)
 	return err
@@ -56,30 +65,29 @@ func createTables(db *sql.DB) error {
 
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS aggregated_logs (
-			id CHAR(36) PRIMARY KEY,  -- Store UUID as CHAR(36)
-			datetime TEXT,
-			count INTEGER,
-			kind TEXT
+			datetime DATETIME NOT NULL,  
+			count INT NOT NULL,  
+			kind VARCHAR(255) NOT NULL,  
+			PRIMARY KEY (datetime, kind)
 		);`,
 		`CREATE TABLE IF NOT EXISTS dci_components (
-			job_id CHAR(36) PRIMARY KEY,       -- Store UUID as CHAR(36)
-			commit_hash TEXT NOT NULL,         -- Commit hash
-			createdAt TIMESTAMP NOT NULL,      -- Job creation timestamp
-			totalSuccess INTEGER DEFAULT 0,   -- Number of successful results
-			totalFailures INTEGER DEFAULT 0,  -- Number of failed results
-			totalErrors INTEGER DEFAULT 0,    -- Number of errors
-			totalSkips INTEGER DEFAULT 0      -- Number of skipped results
+			job_id VARCHAR(36) PRIMARY KEY,       
+			commit_hash VARCHAR(255) NOT NULL,  
+			createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+			totalSuccess INT DEFAULT 0,       
+			totalFailures INT DEFAULT 0,      
+			totalErrors INT DEFAULT 0,        
+			totalSkips INT DEFAULT 0          
 		);`,
 	}
 
 	for _, query := range queries {
 		if _, err := db.Exec(query); err != nil {
-			db.Close()
-			return fmt.Errorf("failed to execute table creation query: %w", err)
+			return fmt.Errorf("failed to create table: %w", err)
 		}
 	}
 
-	logrus.Info("All required tables created successfully.")
+	logrus.Info("Tables created successfully.")
 	return nil
 }
 

@@ -9,7 +9,7 @@
           "targets": [
             {
               "datasource": "MySQL",
-              "rawSql": "SELECT datetime AS time, count AS value FROM aggregated_logs ORDER BY datatime ASC",
+              "rawSql": "SELECT datetime AS time, count AS value FROM aggregated_logs ORDER BY datetime ASC",
               "format": "time_series"
             }
           ]

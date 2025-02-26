@@ -1,0 +1,47 @@
+{
+    "dashboard": {
+      "id": null,
+      "title": "Certsuite Overview",
+      "panels": [
+        {
+          "title": "Quay Pull Events Over Time",
+          "type": "timeseries",
+          "targets": [
+            {
+              "datasource": "MySQL",
+              "rawSql": "SELECT UNIX_TIMESTAMP(datetime) AS time, kind, count AS value FROM aggregated_logs ORDER BY time ASC;",
+              "format": "time_series"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 30
+              }
+            }
+          }
+        },
+        {
+          "title": "DCI Test Runs",
+          "type": "timeseries",
+          "targets": [
+            {
+              "datasource": "MySQL",
+              "rawSql": "SELECT UNIX_TIMESTAMP(createdAt) AS time, job_id, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components GROUP BY job_id, time ORDER BY time ASC;",
+              "format": "time_series"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 30
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+  

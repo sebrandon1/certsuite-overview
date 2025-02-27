@@ -9,34 +9,96 @@
           "targets": [
             {
               "datasource": "MySQL",
-              "rawSql": "SELECT UNIX_TIMESTAMP(datetime) AS time, kind, count AS value FROM aggregated_logs ORDER BY time ASC;",
+              "rawSql": "SELECT DATE(datetime) AS date, kind, SUM(count) AS total_count FROM aggregated_logs GROUP BY date, kind ORDER BY date ASC;",
               "format": "time_series"
             }
           ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
           "fieldConfig": {
             "defaults": {
               "custom": {
-                "lineWidth": 2,
-                "fillOpacity": 30
+                "lineWidth": 3,
+                "fillOpacity": 50
               }
             }
           }
         },
         {
-          "title": "DCI Test Runs",
+          "title": "Quay Pull Events by Month",
           "type": "timeseries",
           "targets": [
             {
               "datasource": "MySQL",
-              "rawSql": "SELECT UNIX_TIMESTAMP(createdAt) AS time, job_id, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components GROUP BY job_id, time ORDER BY time ASC;",
+              "rawSql": "SELECT DATE_FORMAT(datetime, '%Y-%m') AS month, kind, SUM(count) AS total_count FROM aggregated_logsGROUP BY month, kind ORDER BY month ASC;",
               "format": "time_series"
             }
           ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
           "fieldConfig": {
             "defaults": {
               "custom": {
                 "lineWidth": 2,
-                "fillOpacity": 30
+                "fillOpacity": 40
+              }
+            }
+          }
+        },
+        {
+          "title": "DCI Test Runs Over Time",
+          "type": "timeseries",
+          "targets": [
+            {
+              "datasource": "MySQL",
+              "rawSql": "SELECT DATE(createdAt) AS date, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components GROUP BY date ORDER BY date ASC;",
+              "format": "time_series"
+            }
+          ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "lineWidth": 3,
+                "fillOpacity": 50
+              }
+            }
+          }
+        },
+        {
+          "title": "DCI Test Runs by Month",
+          "type": "timeseries",
+          "targets": [
+            {
+              "datasource": "MySQL",
+              "rawSql": "SELECT DATE_FORMAT(createdAt, '%Y-%m') AS month, SUM(totalSuccess) AS total_success, SUM(totalFailures) AS total_failures, SUM(totalErrors) AS total_errors, SUM(totalSkips) AS total_skips FROM dci_components GROUP BY month ORDER BY month ASC;",
+              "format": "time_series"
+            }
+          ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "lineWidth": 3,
+                "fillOpacity": 50
               }
             }
           }

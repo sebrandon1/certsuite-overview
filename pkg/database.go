@@ -68,7 +68,7 @@ func createTables(db *sql.DB) error {
 			datetime DATETIME NOT NULL,  
 			count INT NOT NULL,  
 			kind VARCHAR(255) NOT NULL,  
-			PRIMARY KEY (datetime, kind)
+			PRIMARY KEY datetime
 		);`,
 		`CREATE TABLE IF NOT EXISTS dci_components (
 			job_id VARCHAR(36) PRIMARY KEY,       

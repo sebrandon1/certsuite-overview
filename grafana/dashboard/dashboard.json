@@ -9,7 +9,7 @@
           "targets": [
             {
               "datasource": "MySQL",
-              "rawSql": "SELECT DATE(datetime) AS date, kind, SUM(count) AS total_count FROM aggregated_logs GROUP BY date, kind ORDER BY date ASC;",
+              "rawSql": "SELECT DATE(datetime) AS date, SUM(count) AS total_count FROM aggregated_logs GROUP BY date ORDER BY date ASC;",
               "format": "time_series"
             }
           ],
@@ -34,7 +34,7 @@
           "targets": [
             {
               "datasource": "MySQL",
-              "rawSql": "SELECT DATE_FORMAT(datetime, '%Y-%m') AS month, kind, SUM(count) AS total_count FROM aggregated_logsGROUP BY month, kind ORDER BY month ASC;",
+              "rawSql": "SELECT DATE_FORMAT(datetime, '%Y-%m') AS month, SUM(count) AS total_count FROM aggregated_logs GROUP BY month ORDER BY month ASC;",
               "format": "time_series"
             }
           ],
@@ -52,6 +52,56 @@
               }
             }
           }
+        },
+        {
+            "title": "Quay Pull Events by Day and Kind",
+            "type": "timeseries",
+            "targets": [
+              {
+                "datasource": "MySQL",
+                "rawSql": "SELECT DATE(datetime) AS day, kind, SUM(count) AS total_count FROM aggregated_logs GROUP BY day, kind ORDER BY day, kind;",
+                "format": "time_series"
+              }
+            ],
+            "options": {
+              "tooltip": {
+                "mode": "all",
+                "sort": "desc"
+              }
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "lineWidth": 2,
+                  "fillOpacity": 50
+                }
+              }
+            }
+        },
+        {
+            "title": "Quay Pull Events by Month and Kind",
+            "type": "timeseries",
+            "targets": [
+              {
+                "datasource": "MySQL",
+                "rawSql": "SELECT DATE_FORMAT(datetime, '%Y-%m') AS month, kind, SUM(count) AS total_count FROM aggregated_logs GROUP BY month, kind ORDER BY month, kind;",
+                "format": "time_series"
+              }
+            ],
+            "options": {
+              "tooltip": {
+                "mode": "all",
+                "sort": "desc"
+              }
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "lineWidth": 2,
+                  "fillOpacity": 50
+                }
+              }
+            }
         },
         {
           "title": "DCI Test Runs Over Time",

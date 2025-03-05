@@ -29,9 +29,7 @@ func insertComponentData(db *sql.DB, jobID, commit, createdAt string, totalSucce
 func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	insertQuery := `
         INSERT INTO aggregated_logs (datetime, count, kind) 
-        VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-        count = VALUES(count);
+        VALUES (?, ?, ?);
     `
 	_, err := db.Exec(insertQuery, datetime, count, kind)
 	return err
@@ -68,7 +66,7 @@ func createTables(db *sql.DB) error {
 			datetime DATETIME NOT NULL,  
 			count INT NOT NULL,  
 			kind VARCHAR(255) NOT NULL,  
-			PRIMARY KEY datetime
+			PRIMARY KEY (datetime, kind)
 		);`,
 		`CREATE TABLE IF NOT EXISTS dci_components (
 			job_id VARCHAR(36) PRIMARY KEY,       

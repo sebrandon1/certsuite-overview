@@ -10,16 +10,23 @@ import (
 
 // insertComponentData inserts component details into the dci_components table.
 func insertComponentData(db *sql.DB, jobID, commit, createdAt string, totalSuccess, totalFailures, totalErrors, totalSkips int) error {
+	if jobID == "" || commit == "" {
+		return fmt.Errorf("invalid input: jobID and commit_hash cannot be empty")
+	}
+	if totalSuccess < 0 || totalFailures < 0 || totalErrors < 0 || totalSkips < 0 {
+		return fmt.Errorf("invalid input: totalSuccess=%v, totalFailures=%v, totalErrors=%v, totalSkips=%v", totalSuccess, totalFailures, totalErrors, totalSkips)
+	}
+
 	insertQuery := `
         INSERT INTO dci_components (job_id, commit_hash, createdAt, totalSuccess, totalFailures, totalErrors, totalSkips)
         VALUES (?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
         commit_hash = VALUES(commit_hash),
         createdAt = VALUES(createdAt),
-        totalSuccess = VALUES(totalSuccess),
-        totalFailures = VALUES(totalFailures),
-        totalErrors = VALUES(totalErrors),
-        totalSkips = VALUES(totalSkips);
+        totalSuccess = totalSuccess + VALUES(totalSuccess),
+        totalFailures = totalFailures + VALUES(totalFailures),
+        totalErrors = totalErrors + VALUES(totalErrors),
+        totalSkips = totalSkips + VALUES(totalSkips);
     `
 	_, err := db.Exec(insertQuery, jobID, commit, createdAt, totalSuccess, totalFailures, totalErrors, totalSkips)
 	return err

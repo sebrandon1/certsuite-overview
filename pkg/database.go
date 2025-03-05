@@ -27,9 +27,14 @@ func insertComponentData(db *sql.DB, jobID, commit, createdAt string, totalSucce
 
 // insertQuayData inserts a record of Quay image pulls into the database.
 func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
+	if datetime == "" || kind == "" || count < 0 {
+        return fmt.Errorf("datetime or kind cannot be empty: datetime=%v, kind=%v", datetime, kind)
+    }
 	insertQuery := `
         INSERT INTO aggregated_logs (datetime, count, kind) 
-        VALUES (?, ?, ?);
+        VALUES (?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+        count = count + VALUES(count);
     `
 	_, err := db.Exec(insertQuery, datetime, count, kind)
 	return err

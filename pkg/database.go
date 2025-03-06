@@ -3,7 +3,9 @@ package pkg
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -32,18 +34,31 @@ func insertComponentData(db *sql.DB, jobID, commit, createdAt string, totalSucce
 	return err
 }
 
-// insertQuayData inserts a record of Quay image pulls into the database.
+// insertQuayData inserts a record of Quay image pulls into the aggregated_logs table.
 func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
+	log.Printf("Received datetime: %v, count: %v, kind: %v", datetime, count, kind)
+
 	if datetime == "" || kind == "" || count < 0 {
-        return fmt.Errorf("datetime or kind cannot be empty: datetime=%v, kind=%v", datetime, kind)
-    }
+		return fmt.Errorf("invalid input: datetime=%v, kind=%v, count=%d (datetime/kind cannot be empty, count cannot be negative)", datetime, kind, count)
+
+	}
+
+	parsedDate, err := time.Parse("Mon, 02 Jan 2006 15:04:05 -0700", datetime)
+	if err != nil {
+		return fmt.Errorf("invalid datetime format: %v, expected YYYY-MM-DD", datetime)
+	}
+	dateStr := parsedDate.Format("2006-01-02")
+
+	// Define the insert query with ON DUPLICATE KEY UPDATE
 	insertQuery := `
-        INSERT INTO aggregated_logs (datetime, count, kind) 
-        VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-        count = count + VALUES(count);
-    `
-	_, err := db.Exec(insertQuery, datetime, count, kind)
+    INSERT INTO aggregated_logs (datetime, count, kind)
+    VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE count = count + VALUES(count);`
+
+	_, err = db.Exec(insertQuery, dateStr, count, kind)
+	if err != nil {
+		log.Printf("Error executing insert query: %v", err)
+	}
 	return err
 }
 
@@ -75,11 +90,12 @@ func createTables(db *sql.DB) error {
 
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS aggregated_logs (
-			datetime DATETIME NOT NULL,  
+			datetime DATE NOT NULL,
 			count INT NOT NULL,  
 			kind VARCHAR(255) NOT NULL,  
-			PRIMARY KEY (datetime, kind)
+			PRIMARY KEY (datetime, kind)		
 		);`,
+
 		`CREATE TABLE IF NOT EXISTS dci_components (
 			job_id VARCHAR(36) PRIMARY KEY,       
 			commit_hash VARCHAR(255) NOT NULL,  
@@ -201,9 +217,9 @@ func initDBAWS() (*sql.DB, error) {
 
 func ConnectToLocalDB() (*sql.DB, error) {
 	const (
-		rootDSN   = "root:mypassword@tcp(localhost:3306)/"
-		dbName    = "certsuite_usage_db"
-		finalDSN  = "root:mypassword@tcp(localhost:3306)/" + dbName
+		rootDSN  = "root:mypassword@tcp(localhost:3306)/"
+		dbName   = "certsuite_usage_db"
+		finalDSN = "root:mypassword@tcp(localhost:3306)/" + dbName
 	)
 
 	logrus.Info("Opening connection to local MySQL server...")

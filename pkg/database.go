@@ -42,7 +42,7 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 		return fmt.Errorf("invalid input: datetime=%v, kind=%v, count=%d (datetime/kind cannot be empty, count cannot be negative)", datetime, kind, count)
 
 	}
-
+	
 	parsedDate, err := time.Parse("Mon, 02 Jan 2006 15:04:05 -0700", datetime)
 	if err != nil {
 		return fmt.Errorf("invalid datetime format: %v, expected YYYY-MM-DD", datetime)
@@ -52,9 +52,10 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	// Define the insert query with ON DUPLICATE KEY UPDATE
 	insertQuery := `
     INSERT INTO aggregated_logs (datetime, count, kind)
-    VALUES (?, ?, ?)
-    ON DUPLICATE KEY UPDATE count = count + VALUES(count);`
+	VALUES (?, ?, ?)
+	ON DUPLICATE KEY UPDATE count = count + VALUES(count);`
 
+	log.Printf("🚀 Inserting into DB: datetime=%s, count=%d, kind=%s", dateStr, count, kind)
 	_, err = db.Exec(insertQuery, dateStr, count, kind)
 	if err != nil {
 		log.Printf("Error executing insert query: %v", err)
@@ -91,9 +92,9 @@ func createTables(db *sql.DB) error {
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS aggregated_logs (
 			datetime DATE NOT NULL,
-			count INT NOT NULL,  
+			count INT UNSIGNED NOT NULL DEFAULT 0,  
 			kind VARCHAR(255) NOT NULL,  
-			PRIMARY KEY (datetime, kind)		
+			PRIMARY KEY (datetime, kind)
 		);`,
 
 		`CREATE TABLE IF NOT EXISTS dci_components (

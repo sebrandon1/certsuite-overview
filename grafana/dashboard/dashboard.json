@@ -1,159 +1,157 @@
 {
-    "dashboard": {
-      "id": null,
-      "title": "Certsuite Overview",
-      "panels": [
-        {
-          "title": "Quay Pull Events Over Time",
-          "type": "timeseries",
-          "targets": [
-            {
-              "datasource": "MySQL",
-              "rawSql": "SELECT DATE(datetime) AS date, SUM(count) AS total_count FROM aggregated_logs GROUP BY date ORDER BY date ASC;",
-              "format": "time_series"
-            }
-          ],
-          "options": {
-            "tooltip": {
-              "mode": "all",
-              "sort": "desc"
-            }
-          },
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "lineWidth": 3,
-                "fillOpacity": 50
-              }
-            }
-          }
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
         },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "title": "Quay Pull Events Over Time",
+      "type": "barchart",
+      "targets": [
         {
-          "title": "Quay Pull Events by Month",
-          "type": "timeseries",
-          "targets": [
-            {
-              "datasource": "MySQL",
-              "rawSql": "SELECT DATE_FORMAT(datetime, '%Y-%m') AS month, SUM(count) AS total_count FROM aggregated_logs GROUP BY month ORDER BY month ASC;",
-              "format": "time_series"
-            }
-          ],
-          "options": {
-            "tooltip": {
-              "mode": "all",
-              "sort": "desc"
-            }
-          },
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "lineWidth": 2,
-                "fillOpacity": 40
-              }
-            }
-          }
-        },
-        {
-            "title": "Quay Pull Events by Day and Kind",
-            "type": "timeseries",
-            "targets": [
-              {
-                "datasource": "MySQL",
-                "rawSql": "SELECT DATE(datetime) AS day, kind, SUM(count) AS total_count FROM aggregated_logs GROUP BY day, kind ORDER BY day, kind;",
-                "format": "time_series"
-              }
-            ],
-            "options": {
-              "tooltip": {
-                "mode": "all",
-                "sort": "desc"
-              }
-            },
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "lineWidth": 2,
-                  "fillOpacity": 50
-                }
-              }
-            }
-        },
-        {
-            "title": "Quay Pull Events by Month and Kind",
-            "type": "timeseries",
-            "targets": [
-              {
-                "datasource": "MySQL",
-                "rawSql": "SELECT DATE_FORMAT(datetime, '%Y-%m') AS month, kind, SUM(count) AS total_count FROM aggregated_logs GROUP BY month, kind ORDER BY month, kind;",
-                "format": "time_series"
-              }
-            ],
-            "options": {
-              "tooltip": {
-                "mode": "all",
-                "sort": "desc"
-              }
-            },
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "lineWidth": 2,
-                  "fillOpacity": 50
-                }
-              }
-            }
-        },
-        {
-          "title": "DCI Test Runs Over Time",
-          "type": "timeseries",
-          "targets": [
-            {
-              "datasource": "MySQL",
-              "rawSql": "SELECT DATE(createdAt) AS date, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components GROUP BY date ORDER BY date ASC;",
-              "format": "time_series"
-            }
-          ],
-          "options": {
-            "tooltip": {
-              "mode": "all",
-              "sort": "desc"
-            }
-          },
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "lineWidth": 3,
-                "fillOpacity": 50
-              }
-            }
-          }
-        },
-        {
-          "title": "DCI Test Runs by Month",
-          "type": "timeseries",
-          "targets": [
-            {
-              "datasource": "MySQL",
-              "rawSql": "SELECT DATE_FORMAT(createdAt, '%Y-%m') AS month, SUM(totalSuccess) AS total_success, SUM(totalFailures) AS total_failures, SUM(totalErrors) AS total_errors, SUM(totalSkips) AS total_skips FROM dci_components GROUP BY month ORDER BY month ASC;",
-              "format": "time_series"
-            }
-          ],
-          "options": {
-            "tooltip": {
-              "mode": "all",
-              "sort": "desc"
-            }
-          },
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "lineWidth": 3,
-                "fillOpacity": 50
-              }
-            }
-          }
+          "datasource": { "type": "mysql", "uid": "MySQL" },
+          "rawSql": "SELECT datetime AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs GROUP BY time ORDER BY time ASC;",
+          "format": "table"
         }
       ]
-    }
-  }
-  
+    },
+    {
+      "title": "Quay Pull Events by Month",
+      "type": "barchart",
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "MySQL" },
+          "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(datetime, '%Y-%m-01')) AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs GROUP BY time ORDER BY time ASC;",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "title": "Quay Pull Events by Kind",
+      "type": "barchart",
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "MySQL" },
+          "rawSql": "SELECT DATE(datetime) AS time, kind, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs GROUP BY time, kind ORDER BY time ASC;",
+          "format": "time_series"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "stacking": {
+              "mode": "normal"
+            },
+            "barAlignment": 0
+          },
+          "mappings": [],
+          "color": {
+            "mode": "palette-classic"
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "desc"
+          },
+          "displayNameFromDS": true
+        },
+        "overrides": []
+      }
+    },
+    {
+      "title": "DCI Test Runs Over Time",
+      "type": "barchart",
+      "targets": [
+        {
+          "datasource": "MySQL",
+          "rawSql": "SELECT DATE(createdAt) AS time, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components GROUP BY time ORDER BY time ASC;",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "barAlignment": 0,
+            "fillOpacity": 80,
+            "lineWidth": 2,
+            "stacking": {
+              "mode": "normal"
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "desc"
+          }
+        }
+      }
+    },
+    {
+      "title": "DCI Test Runs by Month",
+      "type": "barchart",
+      "targets": [
+        {
+          "datasource": "MySQL",
+          "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(createdAt, '%Y-%m-01')) AS time, SUM(totalSuccess) AS total_success, SUM(totalFailures) AS total_failures, SUM(totalErrors) AS total_errors, SUM(totalSkips) AS total_skips FROM dci_components GROUP BY time ORDER BY time ASC;",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "barAlignment": 0,
+            "fillOpacity": 80,
+            "lineWidth": 2,
+            "stacking": {
+              "mode": "normal"
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "desc"
+          }
+        }
+      }
+    }    
+  ],
+  "preload": true,
+  "refresh": "10s",
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Certsuite Overview",
+  "uid": "ceg4ij07o5c00a",
+  "version": 1,
+  "weekStart": ""
+}

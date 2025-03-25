@@ -1,0 +1,27 @@
+name: Test Incoming Changes
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-vet:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run make vet
+        run: make vet
+
+      - name: Run linter
+        uses: golangci/golangci-lint-action@v7
+        with:
+          args: --timeout 10m0s

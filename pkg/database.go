@@ -42,7 +42,7 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 		return fmt.Errorf("invalid input: datetime=%v, kind=%v, count=%d (datetime/kind cannot be empty, count cannot be negative)", datetime, kind, count)
 
 	}
-	
+
 	parsedDate, err := time.Parse("Mon, 02 Jan 2006 15:04:05 -0700", datetime)
 	if err != nil {
 		return fmt.Errorf("invalid datetime format: %v, expected YYYY-MM-DD", datetime)
@@ -67,7 +67,8 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 func pingDB(db *sql.DB) error {
 	logrus.Info("Pinging the database to verify connection...")
 	if err := db.Ping(); err != nil {
-		db.Close()
+		log.Printf("Error pinging database: %v", err)
+		err = db.Close()
 		return fmt.Errorf("database ping failed: %w", err)
 	}
 	logrus.Info("Database connection verified successfully.")
@@ -185,7 +186,11 @@ func initDBAWS() (*sql.DB, error) {
 	}
 
 	// Close the initial connection and reconnect with the specified database.
-	db.Close()
+	err = db.Close()
+	if err != nil {
+		return nil, fmt.Errorf("failed to close initial connection: %w", err)
+	}
+
 	DBUsername := os.Getenv("DB_USER")
 	DBPassword := os.Getenv("DB_PASSWORD")
 	DBURL := os.Getenv("DB_URL")
@@ -230,7 +235,11 @@ func ConnectToLocalDB() (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to MySQL server: %w", err)
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			logrus.Errorf("failed to close MySQL connection: %v", err)
+		}
+	}()
 
 	// Check if the database exists
 	var exists int
@@ -258,8 +267,9 @@ func ConnectToLocalDB() (*sql.DB, error) {
 
 	// Verify connection
 	if err := pingDB(db); err != nil {
-		db.Close()
-		return nil, fmt.Errorf("failed to ping MySQL database '%s': %w", dbName, err)
+		log.Printf("Error pinging database: %v", err)
+		err = db.Close()
+		return nil, fmt.Errorf("failed to close MySQL database connection '%s': %w", dbName, err)
 	}
 
 	logrus.Infof("Successfully connected to MySQL database '%s'.", dbName)

@@ -76,7 +76,10 @@ func TestInsertComponentData(t *testing.T) {
 			// Create a mock database connection
 			db, mock, err := sqlmock.New()
 			assert.NoError(t, err)
-			defer db.Close()
+			defer func() {
+				err := db.Close()
+				assert.NoError(t, err)
+			}()
 
 			// Set up mock behavior
 			tc.mockQueryResult(mock)
@@ -151,7 +154,10 @@ func TestInsertQuayData(t *testing.T) {
 			// Set up the mock database
 			db, mock, err := sqlmock.New()
 			assert.NoError(t, err)
-			defer db.Close()
+			defer func() {
+				err := db.Close()
+				assert.NoError(t, err)
+			}()
 
 			// Apply the test-specific mock setup
 			tc.mockSetup(mock)

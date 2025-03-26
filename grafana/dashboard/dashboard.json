@@ -24,6 +24,8 @@
     {
       "title": "Quay Pull Events Over Time",
       "type": "barchart",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "refresh": "10s",
       "targets": [
         {
           "datasource": { "type": "mysql", "uid": "MySQL" },
@@ -35,6 +37,8 @@
     {
       "title": "Quay Pull Events by Month",
       "type": "barchart",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "refresh": "10s",
       "targets": [
         {
           "datasource": { "type": "mysql", "uid": "MySQL" },
@@ -46,6 +50,8 @@
     {
       "title": "Quay Pull Events by Kind",
       "type": "barchart",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "refresh": "10s",
       "targets": [
         {
           "datasource": { "type": "mysql", "uid": "MySQL" },
@@ -79,6 +85,8 @@
     {
       "title": "DCI Test Runs Over Time",
       "type": "barchart",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "refresh": "10s",
       "targets": [
         {
           "datasource": "MySQL",
@@ -109,6 +117,7 @@
     {
       "title": "DCI Test Runs by Month",
       "type": "barchart",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
       "targets": [
         {
           "datasource": "MySQL",

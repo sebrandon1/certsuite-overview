@@ -2,7 +2,7 @@ module github.com/redhat-best-practices-for-k8s/certsuite-overview
 
 go 1.24.1
 
-require github.com/go-sql-driver/mysql v1.9.1
+require github.com/go-sql-driver/mysql v1.9.2
 
 require (
 	github.com/fsnotify/fsnotify v1.8.0 // indirect

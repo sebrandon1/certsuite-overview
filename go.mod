@@ -32,7 +32,7 @@ require (
 	github.com/aws/aws-sdk-go v1.55.6 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/sebrandon1/go-dci v0.0.8
-	github.com/sebrandon1/go-quay v0.0.4
+	github.com/sebrandon1/go-quay v0.0.5
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0

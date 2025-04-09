@@ -144,7 +144,56 @@
           }
         }
       }
-    }    
+    },
+    {
+      "title": "DCI Test Cases Ranked by Failures",
+      "type": "barchart",
+      "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
+      "refresh": "10s",
+      "targets": [
+        {
+          "datasource": "MySQL",
+          "rawSql": "SELECT job_id, commit_hash, SUM(totalFailures) AS totalFailures FROM dci_components GROUP BY job_id, commit_hash ORDER BY totalFailures DESC;",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "barAlignment": 0,
+            "fillOpacity": 80,
+            "lineWidth": 2,
+            "stacking": {
+              "mode": "normal"
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "desc",
+            "value": "totalFailures",
+            "fields": [
+              {
+                "name": "job_id",
+                "value": "job_id"
+              },
+              {
+                "name": "commit_hash",
+                "value": "commit_hash"
+              }
+            ]
+          }
+        }
+      },
+      "xaxis": {
+        "placement": "hidden" 
+      },
+      "yaxis": {
+        "show": true
+      }
+    }                        
   ],
   "preload": true,
   "refresh": "10s",

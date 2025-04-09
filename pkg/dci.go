@@ -10,7 +10,8 @@ import (
 )
 
 const (
-	daysBackLimit = 1 // we want display for 1 day
+	daysBackLimit  = 1 // we want display for 1 day
+	certsuiteTests = "certsuite-tests_junit.xml"
 )
 
 func FetchDciData() error {
@@ -50,11 +51,17 @@ func FetchDciData() error {
 					commitHash = parts[1]
 				}
 				if strings.Contains(component.Name, "cnf-certification-test") || strings.Contains(component.Name, "certsuite") {
+					totalErrors = 0
+					totalFailures = 0
+					totalSkips = 0
+					totalSuccess = 0
 					for _, result := range job.Results {
-						totalErrors += result.Errors
-						totalFailures += result.Failures
-						totalSkips += result.Skips
-						totalSuccess += result.Success
+						if result.Name == certsuiteTests {
+							totalErrors += result.Errors
+							totalFailures += result.Failures
+							totalSkips += result.Skips
+							totalSuccess += result.Success
+						}
 					}
 
 					log.Println("Inserting DCI component data into the database...")

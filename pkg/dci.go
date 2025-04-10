@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	daysBackLimit  = 7 // we want display for 1 day
+	daysBackLimit  = 7
 	certsuiteTests = "certsuite-tests_junit.xml"
 )
 

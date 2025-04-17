@@ -28,7 +28,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": { "type": "mysql", "uid": "certsuite-overview-datasource" },
+          "datasource": { "type": "mysql", "uid": "0" },
           "rawSql": "SELECT datetime AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;",
           "format": "table"
         }
@@ -41,7 +41,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": { "type": "mysql", "uid": "certsuite-overview-datasource" },
+          "datasource": { "type": "mysql", "uid": "0" },
           "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(datetime, '%Y-%m-01')) AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;",
           "format": "table"
         }
@@ -54,7 +54,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": { "type": "mysql", "uid": "certsuite-overview-datasource" },
+          "datasource": { "type": "mysql", "uid": "0" },
           "rawSql": "SELECT DATE(datetime) AS time, kind, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time, kind ORDER BY time ASC;",
           "format": "time_series"
         }

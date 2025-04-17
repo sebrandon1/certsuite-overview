@@ -1,5 +1,4 @@
 {
-  "__inputs": null,
   "annotations": {
     "list": [
       {
@@ -23,133 +22,80 @@
   "links": [],
   "panels": [
     {
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "refresh": "10s",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "1"
-          },
-          "format": "table",
-          "rawSql": "SELECT datetime AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;"
-        }
-      ],
       "title": "Quay Pull Events Over Time",
-      "type": "barchart"
-    },
-    {
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
+      "type": "barchart",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
       "refresh": "10s",
       "targets": [
         {
-          "datasource": {
-            "type": "mysql",
-            "uid": "1"
-          },
-          "format": "table",
-          "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(datetime, '%Y-%m-01')) AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;"
+          "datasource": { "type": "mysql", "uid": "1" },
+          "rawSql": "SELECT datetime AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;",
+          "format": "table"
         }
-      ],
-      "title": "Quay Pull Events by Month",
-      "type": "barchart"
+      ]
     },
     {
+      "title": "Quay Pull Events by Month",
+      "type": "barchart",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "refresh": "10s",
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "1" },
+          "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(datetime, '%Y-%m-01')) AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "title": "Quay Pull Events by Kind",
+      "type": "barchart",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "refresh": "10s",
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "1" },
+          "rawSql": "SELECT DATE(datetime) AS time, kind, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time, kind ORDER BY time ASC;",
+          "format": "time_series"
+        }
+      ],
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "stacking": {
+              "mode": "normal"
+            },
+            "barAlignment": 0
+          },
+          "mappings": [],
           "color": {
             "mode": "palette-classic"
           },
-          "custom": {
-            "barAlignment": 0,
-            "fillOpacity": 80,
-            "lineWidth": 2,
-            "stacking": {
-              "mode": "normal"
-            }
-          },
-          "displayNameFromDS": true,
-          "mappings": [],
           "tooltip": {
             "mode": "single",
             "sort": "desc"
-          }
+          },
+          "displayNameFromDS": true
         },
         "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 8
-      },
-      "refresh": "10s",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "1"
-          },
-          "format": "time_series",
-          "rawSql": "SELECT DATE(datetime) AS time, kind, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time, kind ORDER BY time ASC;"
-        }
-      ],
-      "title": "Quay Pull Events by Kind",
-      "type": "barchart"
+      }
     },
     {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "barAlignment": 0,
-            "fillOpacity": 80,
-            "lineWidth": 2,
-            "stacking": {
-              "mode": "normal"
-            }
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "desc"
-          }
-        }
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 8
-      },
-      "refresh": "10s",
-      "targets": [
-        {
-          "datasource": "certsuite-overview-datasource",
-          "format": "table",
-          "rawSql": "SELECT DATE(createdAt) AS time, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY time ORDER BY time ASC;"
-        }
-      ],
       "title": "DCI Test Runs Over Time",
-      "type": "barchart"
-    },
-    {
+      "type": "barchart",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "refresh": "10s",
+      "targets": [
+        {
+          "datasource": "certsuite-overview-datasource",
+          "rawSql": "SELECT DATE(createdAt) AS time, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY time ORDER BY time ASC;",
+          "format": "table"
+        }
+      ],
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
           "custom": {
             "barAlignment": 0,
             "fillOpacity": 80,
@@ -157,35 +103,30 @@
             "stacking": {
               "mode": "normal"
             }
+          },
+          "color": {
+            "mode": "palette-classic"
           },
           "tooltip": {
             "mode": "single",
             "sort": "desc"
           }
         }
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 16
-      },
+      }
+    },
+    {
+      "title": "DCI Test Runs by Month",
+      "type": "barchart",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
       "targets": [
         {
           "datasource": "certsuite-overview-datasource",
-          "format": "table",
-          "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(createdAt, '%Y-%m-01')) AS time, SUM(totalSuccess) AS total_success, SUM(totalFailures) AS total_failures, SUM(totalErrors) AS total_errors, SUM(totalSkips) AS total_skips FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY time ORDER BY time ASC;"
+          "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(createdAt, '%Y-%m-01')) AS time, SUM(totalSuccess) AS total_success, SUM(totalFailures) AS total_failures, SUM(totalErrors) AS total_errors, SUM(totalSkips) AS total_skips FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY time ORDER BY time ASC;",
+          "format": "table"
         }
       ],
-      "title": "DCI Test Runs by Month",
-      "type": "barchart"
-    },
-    {
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
           "custom": {
             "barAlignment": 0,
             "fillOpacity": 80,
@@ -194,7 +135,45 @@
               "mode": "normal"
             }
           },
+          "color": {
+            "mode": "palette-classic"
+          },
           "tooltip": {
+            "mode": "single",
+            "sort": "desc"
+          }
+        }
+      }
+    },
+    {
+      "title": "DCI Test Cases Ranked by Failures",
+      "type": "barchart",
+      "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
+      "refresh": "10s",
+      "targets": [
+        {
+          "datasource": "certsuite-overview-datasource",
+          "rawSql": "SELECT job_id, commit_hash, SUM(totalFailures) AS totalFailures FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY job_id, commit_hash ORDER BY totalFailures DESC;",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "barAlignment": 0,
+            "fillOpacity": 80,
+            "lineWidth": 2,
+            "stacking": {
+              "mode": "normal"
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "desc",
+            "value": "totalFailures",
             "fields": [
               {
                 "name": "job_id",
@@ -204,132 +183,24 @@
                 "name": "commit_hash",
                 "value": "commit_hash"
               }
-            ],
-            "mode": "single",
-            "sort": "desc",
-            "value": "totalFailures"
+            ]
           }
         }
       },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 16
-      },
-      "refresh": "10s",
-      "targets": [
-        {
-          "datasource": "certsuite-overview-datasource",
-          "format": "table",
-          "rawSql": "SELECT job_id, commit_hash, SUM(totalFailures) AS totalFailures FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY job_id, commit_hash ORDER BY totalFailures DESC;"
-        }
-      ],
-      "title": "DCI Test Cases Ranked by Failures",
-      "type": "barchart",
       "xaxis": {
-        "placement": "hidden"
+        "placement": "hidden" 
       },
       "yaxis": {
         "show": true
       }
-    },
-    {
-      "id": 0,
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "1"
-          },
-          "hide": false
-        }
-      ],
-      "title": "Quay Pull Events Over Time",
-      "type": "barchart"
-    },
-    {
-      "id": 0,
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "1"
-          },
-          "hide": false
-        }
-      ],
-      "title": "Quay Pull Events by Month",
-      "type": "barchart"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "mappings": []
-        }
-      },
-      "id": 0,
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "1"
-          },
-          "hide": false
-        }
-      ],
-      "title": "Quay Pull Events by Kind",
-      "type": "barchart"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {}
-      },
-      "id": 0,
-      "targets": [
-        {
-          "datasource": "certsuite-overview-datasource",
-          "hide": false
-        }
-      ],
-      "title": "DCI Test Runs Over Time",
-      "type": "barchart"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {}
-      },
-      "id": 0,
-      "targets": [
-        {
-          "datasource": "certsuite-overview-datasource",
-          "hide": false
-        }
-      ],
-      "title": "DCI Test Runs by Month",
-      "type": "barchart"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {}
-      },
-      "id": 0,
-      "targets": [
-        {
-          "datasource": "certsuite-overview-datasource",
-          "hide": false
-        }
-      ],
-      "title": "DCI Test Cases Ranked by Failures",
-      "type": "barchart"
-    }
+    }                        
   ],
   "preload": true,
   "refresh": "",
   "schemaVersion": 40,
   "tags": [],
   "templating": {
-    "list": null
+    "list": []
   },
   "time": {
     "from": "now-7d",

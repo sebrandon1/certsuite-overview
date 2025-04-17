@@ -1,14 +1,13 @@
+---
 apiVersion: 1
 
 datasources:
-  - name: MySQL
+  - name: certsuite-overview-datasource
     type: mysql
-    url: "${DB_URL}:${DB_PORT}"
-    database: "certsuite_usage_db"
-    user: "${DB_USER}"
+    url: DB_URL:DB_PORT
+    database: certsuite_usage_db
+    user: DB_USER
+    editable: true
     secureJsonData:
-      password: "${DB_PASSWORD}"
-    jsonData:
-      tlsAuth: false
-      tlsAuthWithCACert: false
+      password: DB_PASSWORD
       

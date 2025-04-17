@@ -150,6 +150,29 @@
       "type": "barchart",
       "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
       "refresh": "10s",
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "job_id",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
       "targets": [
         {
           "datasource": "certsuite-overview-datasource",
@@ -163,6 +186,7 @@
             "barAlignment": 0,
             "fillOpacity": 80,
             "lineWidth": 2,
+            "axisPlacement": "hidden",
             "stacking": {
               "mode": "normal"
             }

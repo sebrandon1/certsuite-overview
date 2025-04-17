@@ -196,7 +196,7 @@
     }                        
   ],
   "preload": true,
-  "refresh": "10s",
+  "refresh": "",
   "schemaVersion": 40,
   "tags": [],
   "templating": {

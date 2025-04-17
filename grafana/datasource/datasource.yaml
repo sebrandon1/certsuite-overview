@@ -8,6 +8,9 @@ datasources:
     database: certsuite_usage_db
     user: DB_USER
     editable: true
+    uid: 0
+    orgId: 1
+    access: proxy
     secureJsonData:
       password: DB_PASSWORD
       

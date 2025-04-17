@@ -28,7 +28,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": { "type": "mysql", "uid": "MySQL" },
+          "datasource": { "type": "mysql", "uid": "certsuite-overview-datasource" },
           "rawSql": "SELECT datetime AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;",
           "format": "table"
         }
@@ -41,7 +41,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": { "type": "mysql", "uid": "MySQL" },
+          "datasource": { "type": "mysql", "uid": "certsuite-overview-datasource" },
           "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(datetime, '%Y-%m-01')) AS time, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time ORDER BY time ASC;",
           "format": "table"
         }
@@ -54,7 +54,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": { "type": "mysql", "uid": "MySQL" },
+          "datasource": { "type": "mysql", "uid": "certsuite-overview-datasource" },
           "rawSql": "SELECT DATE(datetime) AS time, kind, SUM(count) AS total_count FROM certsuite_usage_db.aggregated_logs WHERE $__timeFilter(datetime) GROUP BY time, kind ORDER BY time ASC;",
           "format": "time_series"
         }
@@ -89,7 +89,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": "MySQL",
+          "datasource": "certsuite-overview-datasource",
           "rawSql": "SELECT DATE(createdAt) AS time, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY time ORDER BY time ASC;",
           "format": "table"
         }
@@ -120,7 +120,7 @@
       "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
       "targets": [
         {
-          "datasource": "MySQL",
+          "datasource": "certsuite-overview-datasource",
           "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(createdAt, '%Y-%m-01')) AS time, SUM(totalSuccess) AS total_success, SUM(totalFailures) AS total_failures, SUM(totalErrors) AS total_errors, SUM(totalSkips) AS total_skips FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY time ORDER BY time ASC;",
           "format": "table"
         }
@@ -152,7 +152,7 @@
       "refresh": "10s",
       "targets": [
         {
-          "datasource": "MySQL",
+          "datasource": "certsuite-overview-datasource",
           "rawSql": "SELECT job_id, commit_hash, SUM(totalFailures) AS totalFailures FROM dci_components WHERE $__timeFilter(createdAt) GROUP BY job_id, commit_hash ORDER BY totalFailures DESC;",
           "format": "table"
         }

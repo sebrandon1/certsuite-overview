@@ -10,7 +10,7 @@ on:
 jobs:
   sync-job:
     if: github.repository_owner == 'redhat-best-practices-for-k8s'
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     # Global environment variables for the job
     env:

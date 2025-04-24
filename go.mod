@@ -29,9 +29,9 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/DATA-DOG/go-sqlmock v1.5.2
-	github.com/aws/aws-sdk-go v1.55.6 // indirect
+	github.com/aws/aws-sdk-go v1.55.7 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
-	github.com/sebrandon1/go-dci v0.0.9
+	github.com/sebrandon1/go-dci v0.0.11
 	github.com/sebrandon1/go-quay v0.0.7
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.20.1

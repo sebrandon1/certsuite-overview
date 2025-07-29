@@ -40,8 +40,8 @@ github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/f
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/sagikazarmark/locafero v0.7.0 h1:5MqpDsTGNDhY8sGp0Aowyf0qKsPrhewaLSsFaodPcyo=
 github.com/sagikazarmark/locafero v0.7.0/go.mod h1:2za3Cg5rMaTMoG/2Ulr9AwtFaIppKXTRYnozin4aB5k=
-github.com/sebrandon1/go-dci v0.0.12 h1:6RV1ODdul4rmkRoLNKRDEEhlRzoIcaozfknT3RIQX3g=
-github.com/sebrandon1/go-dci v0.0.12/go.mod h1:KOUOgall6n14Oa2xTaOOLa0wnQFZWoU+R0B1hVn/FPc=
+github.com/sebrandon1/go-dci v0.0.13 h1:NiFdLg5P1/sdoDaX9xhf0W4FPoQKLDIpVOdCGsc85FA=
+github.com/sebrandon1/go-dci v0.0.13/go.mod h1:NvM08vqn/fqEB6Sc5cdLnCUBez8sNj65MW9V5vPmbnU=
 github.com/sebrandon1/go-quay v0.0.9 h1:GkboZ+hDZ3683o3npll1iYSKwA/qqQNFahmo92N6cyo=
 github.com/sebrandon1/go-quay v0.0.9/go.mod h1:nwbLnCLZDRealzZs9Wz5qTgPVJrLW75PxRryhyT45fE=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=

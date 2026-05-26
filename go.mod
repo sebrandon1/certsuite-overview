@@ -34,7 +34,7 @@ require (
 	filippo.io/edwards25519 v1.2.0 // indirect
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/sebrandon1/go-dci v1.0.1
-	github.com/sebrandon1/go-quay v1.0.3
+	github.com/sebrandon1/go-quay v1.0.4
 	github.com/sirupsen/logrus v1.9.4
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1

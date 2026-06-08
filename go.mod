@@ -2,7 +2,7 @@ module github.com/redhat-best-practices-for-k8s/certsuite-overview
 
 go 1.26.1
 
-toolchain go1.26.3
+toolchain go1.26.4
 
 require github.com/go-sql-driver/mysql v1.10.0
 

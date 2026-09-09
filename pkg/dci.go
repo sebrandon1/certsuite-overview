@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"strings"
@@ -34,7 +35,7 @@ func FetchDciData() error {
 	log.Printf("Fetching DCI data for the last %d days", daysBackLimit)
 
 	// Fetch DCI runs
-	runs, err := dciClient.GetJobs(daysBackLimit)
+	runs, err := dciClient.GetJobs(context.Background(), daysBackLimit)
 	if err != nil {
 		return fmt.Errorf("failed to fetch DCI runs: %w", err)
 	}

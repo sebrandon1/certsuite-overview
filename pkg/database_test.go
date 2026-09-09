@@ -31,7 +31,7 @@ func TestInsertComponentData(t *testing.T) {
 			totalErrors:   1,
 			totalSkips:    5,
 			mockQueryResult: func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec("INSERT OR REPLACE INTO dci_components").
+				mock.ExpectExec("INSERT INTO dci_components").
 					WithArgs("job123", "abc123", "2024-11-26T12:00:00Z", 10, 2, 1, 5).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
@@ -47,27 +47,23 @@ func TestInsertComponentData(t *testing.T) {
 			totalErrors:   0,
 			totalSkips:    2,
 			mockQueryResult: func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec("INSERT OR REPLACE INTO dci_components").
+				mock.ExpectExec("INSERT INTO dci_components").
 					WithArgs("job456", "def456", "2024-11-26T13:00:00Z", 5, 1, 0, 2).
 					WillReturnError(sql.ErrConnDone)
 			},
 			expectedError: true,
 		},
 		{
-			name:          "Empty commit hash",
-			jobID:         "job789",
-			commit:        "",
-			createdAt:     "2024-11-26T14:00:00Z",
-			totalSuccess:  3,
-			totalFailures: 0,
-			totalErrors:   0,
-			totalSkips:    1,
-			mockQueryResult: func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec("INSERT OR REPLACE INTO dci_components").
-					WithArgs("job789", "", "2024-11-26T14:00:00Z", 3, 0, 0, 1).
-					WillReturnResult(sqlmock.NewResult(1, 1))
-			},
-			expectedError: false,
+			name:            "Empty commit hash",
+			jobID:           "job789",
+			commit:          "",
+			createdAt:       "2024-11-26T14:00:00Z",
+			totalSuccess:    3,
+			totalFailures:   0,
+			totalErrors:     0,
+			totalSkips:      1,
+			mockQueryResult: func(mock sqlmock.Sqlmock) {},
+			expectedError:   true,
 		},
 	}
 
@@ -77,12 +73,13 @@ func TestInsertComponentData(t *testing.T) {
 			db, mock, err := sqlmock.New()
 			assert.NoError(t, err)
 			defer func() {
-				err := db.Close()
-				assert.NoError(t, err)
+				assert.NoError(t, db.Close())
+				assert.NoError(t, mock.ExpectationsWereMet())
 			}()
 
 			// Set up mock behavior
 			tc.mockQueryResult(mock)
+			mock.ExpectClose()
 
 			// Call the function
 			err = insertComponentData(db, tc.jobID, tc.commit, tc.createdAt, tc.totalSuccess, tc.totalFailures, tc.totalErrors, tc.totalSkips)
@@ -94,8 +91,6 @@ func TestInsertComponentData(t *testing.T) {
 				assert.NoError(t, err)
 			}
 
-			// Ensure all expectations were met
-			assert.NoError(t, mock.ExpectationsWereMet())
 		})
 	}
 }
@@ -112,36 +107,32 @@ func TestInsertQuayData(t *testing.T) {
 	}{
 		{
 			name:     "Successful Insert",
-			datetime: "2024-11-26T12:00:00Z",
+			datetime: "Tue, 26 Nov 2024 12:00:00 +0000",
 			count:    100,
 			kind:     "image_pulls",
 			mockSetup: func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec(`INSERT OR REPLACE INTO aggregated_logs \(datetime, count, kind\)`).
-					WithArgs("2024-11-26T12:00:00Z", 100, "image_pulls").
+				mock.ExpectExec(`INSERT INTO aggregated_logs \(datetime, count, kind\)`).
+					WithArgs("2024-11-26", 100, "image_pulls").
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
 			expectedError: false,
 		},
 		{
-			name:     "Insert with Missing Kind",
-			datetime: "2024-11-26T12:00:00Z",
-			count:    50,
-			kind:     "",
-			mockSetup: func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec(`INSERT OR REPLACE INTO aggregated_logs \(datetime, count, kind\)`).
-					WithArgs("2024-11-26T12:00:00Z", 50, "").
-					WillReturnResult(sqlmock.NewResult(1, 1))
-			},
-			expectedError: false,
+			name:          "Insert with Missing Kind",
+			datetime:      "Tue, 26 Nov 2024 12:00:00 +0000",
+			count:         50,
+			kind:          "",
+			mockSetup:     func(mock sqlmock.Sqlmock) {},
+			expectedError: true,
 		},
 		{
 			name:     "Database Error",
-			datetime: "2024-11-26T12:00:00Z",
+			datetime: "Tue, 26 Nov 2024 12:00:00 +0000",
 			count:    200,
 			kind:     "image_pulls",
 			mockSetup: func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec(`INSERT OR REPLACE INTO aggregated_logs \(datetime, count, kind\)`).
-					WithArgs("2024-11-26T12:00:00Z", 200, "image_pulls").
+				mock.ExpectExec(`INSERT INTO aggregated_logs \(datetime, count, kind\)`).
+					WithArgs("2024-11-26", 200, "image_pulls").
 					WillReturnError(sql.ErrConnDone)
 			},
 			expectedError: true,
@@ -155,12 +146,13 @@ func TestInsertQuayData(t *testing.T) {
 			db, mock, err := sqlmock.New()
 			assert.NoError(t, err)
 			defer func() {
-				err := db.Close()
-				assert.NoError(t, err)
+				assert.NoError(t, db.Close())
+				assert.NoError(t, mock.ExpectationsWereMet())
 			}()
 
 			// Apply the test-specific mock setup
 			tc.mockSetup(mock)
+			mock.ExpectClose()
 
 			// Call the function
 			err = insertQuayData(db, tc.datetime, tc.count, tc.kind)
@@ -172,8 +164,6 @@ func TestInsertQuayData(t *testing.T) {
 				assert.NoError(t, err)
 			}
 
-			// Ensure all expectations were met
-			assert.NoError(t, mock.ExpectationsWereMet())
 		})
 	}
 }
